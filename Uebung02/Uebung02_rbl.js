@@ -21,7 +21,3 @@ function wuerfeln() {
 }
 
 console.log(wuerfeln())
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
