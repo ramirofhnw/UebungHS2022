@@ -1,0 +1,6 @@
+﻿ID,Name,NominalThermalOutput,GrossElectricalOutput,NetElectricalOutput,UnderConstructionPhase,OperationPhase,DecomissioningPhase,TypeOfCoolingSystem,TypeOfReactor,PhaseOfLife,nuclearPowerPlantR1
+reactor1,Mühleberg,1097,390,373,01.03.1967 - 30.06.1971,06.11.1972 - 20.12.2019,21.12.2019 -,toc1,tor1,pol3,plant1
+reactor2,Gösgen,3002,1060,1010,01.12.1973 - 01.02.1979,01.11.1979 - ,,toc2,tor2,pol2,plant2
+reactor3,Beznau 1,1130,380,365,01.09.1965 - 16.07.1969,01.09.1969 -,,toc1,tor2,pol2,plant3
+reactor4,Beznau 2,1130,380,365,01.01.1968 - 22.10.1971,01.12.1971 -,,toc1,tor2,pol2,plant3
+reactor5,Leibstadt,3600,1245,1190,01.01.1974 - 23.05.1984,15.12.1984 - ,,toc2,tor1,pol2,plant4
