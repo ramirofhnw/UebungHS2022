@@ -93,7 +93,7 @@ function App() {
           <br></br>     
           <Grid container spacing={2}>
             <Grid item xs={2}>
-              <TextField label="Breite" variant="outlined" defaultValue={lat} onChange={
+              <TextField type="number" label="Breite" variant="outlined" defaultValue={lat} onChange={
                 (event) => {
                   if (event.target.value<45.8) {
                     setValueErrorLat("Breite muss > 45.8 sein");
@@ -113,7 +113,7 @@ function App() {
                  }
             </Grid>
             <Grid item xs={2}>
-              <TextField label="Länge" variant="outlined" defaultValue={lng} onChange={
+              <TextField type="number" label="Länge" variant="outlined" defaultValue={lng} onChange={
                  (event) => {
                   if (event.target.value<5.9) {
                     setValueErrorLng("Länge muss > 5.9 sein");
