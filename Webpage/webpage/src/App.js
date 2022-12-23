@@ -8,11 +8,17 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from '@mui/material/Typography';
 import "./Karte.css";
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet';
 
 
 //import { MenuIcon } from '@mui/material/MenuItem';
 //npm install @mui/icons-material
+
+function ChangeView({ center, zoom }) {
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
+}
 
 
 function App() {
@@ -22,6 +28,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const [valueerrorlat, setValueErrorLat] = useState(null);
+  const [valueerrorlng, setValueErrorLng] = useState(null);
 
   // useEffect( () => {console.log("");})
   useEffect(() => {
@@ -34,7 +42,10 @@ function App() {
       iconUrl: require("leaflet/dist/images/marker-icon.png"),
       shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
+
   }, [])
+
+
 
   function download() {
     var url = `https://geodesy.geo.admin.ch/reframe/wgs84tolv95?easting=${lng}&northing=${lat}&format=json`;
@@ -53,9 +64,9 @@ function App() {
     var swisstopo = (<TileLayer url = "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg"
                     attribution='&copy; swisstopo'></TileLayer>);
 
-                    return (
+    return(<>
                       <MapContainer  center={[lat, lng]} zoom={15} scrollWheelZoom={false}>
-                      
+                      <ChangeView center={[lat, lng]} zoom={15} />
                       {swisstopo}
                                          
                       <Marker position={[lat, lng]}>
@@ -64,9 +75,13 @@ function App() {
                         </Popup>
                       </Marker>
                       
-                    </MapContainer>
+                      </MapContainer>
+                    </>
                       );
   }
+
+
+
   return  <>
           <AppBar position="static">
             <Toolbar variant="dense">
@@ -78,16 +93,52 @@ function App() {
           <br></br>     
           <Grid container spacing={2}>
             <Grid item xs={2}>
-              <TextField label="Breite" variant="outlined" defaultValue={lat} onChange={ (event) => {setLatitude(event.target.value)}}/>
+              <TextField label="Breite" variant="outlined" defaultValue={lat} onChange={
+                (event) => {
+                  if (event.target.value<45.8) {
+                    setValueErrorLat("Breite muss > 45.8 sein");
+                  }
+                  else if (event.target.value>47.9)
+                  {
+                    setValueErrorLat("Breite muss < 47.9 sein");
+                  }
+                  else
+                  {
+                    setValueErrorLat(null);
+                    setLatitude(event.target.value);}
+                  }
+                 }/>
+                 {valueerrorlat && 
+                  <><div>{valueerrorlat}</div></>
+                 }
             </Grid>
             <Grid item xs={2}>
-              <TextField label="Länge" variant="outlined" defaultValue={lng} onChange={ (event) => {setLongtitude(event.target.value)}}/>
+              <TextField label="Länge" variant="outlined" defaultValue={lng} onChange={
+                 (event) => {
+                  if (event.target.value<5.9) {
+                    setValueErrorLng("Länge muss > 5.9 sein");
+                  }
+                  else if (event.target.value>10.5)
+                  {
+                    setValueErrorLng("Länge muss < 10.5 sein");
+                  }
+                  else
+                  {
+                    setValueErrorLng(null);
+                    setLongtitude(event.target.value);}
+                  }
+                 
+                 
+                 }/>
+                 {valueerrorlng && 
+                  <><div>{valueerrorlng}</div></>
+                 }
             </Grid>
             <Grid item xs={8}>
               <Button color="error" style={{float: 'right'}} as="a" href="https://www.swisstopo.admin.ch/de/wissen-fakten/geodaesie-vermessung/koordinaten/bezugssystem.html" target="blank" variant="contained" onClick={ () => { download()} }>Informationen WGS84</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button variant="contained" onClick={ () => { download()} }>berechnen</Button>
+              <Button variant="contained" onClick={ () => { download(); console.log(`${lng} - ${lat}`); karte(lat, lng);} }>berechnen</Button>
             </Grid>
             <Grid item xs={6}>
               {loading &&
@@ -114,15 +165,12 @@ function App() {
             <Grid item xs={8}> 
               <Button color="error" style={{float: 'right'}} as="a" href="https://www.swisstopo.admin.ch/de/wissen-fakten/geodaesie-vermessung/bezugsrahmen/lokal/lv95.html" target="blank" variant="contained" onClick={ () => { download()} }>Informationen LV95</Button>
             </Grid>
-            <Grid item xs={12} onChange={ (event) => {setLatitude(event.target.value) ; setLongtitude(event.target.value)}}>
+            <Grid item xs={12}>
             {
-            karte()
+             karte()
             }
             </Grid>
-          </Grid>   
-          
-
-        
+          </Grid> 
           </>
 }
 
